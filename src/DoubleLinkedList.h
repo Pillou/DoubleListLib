@@ -21,7 +21,6 @@
  * 
  */
 
-// TODO: add documentation
 #ifndef __DOUBLE_LINKED_LIST__H__ 
 #define __DOUBLE_LINKED_LIST__H__
 
@@ -41,7 +40,7 @@ typedef struct
 	ListNode *last;
 } List;
 
-List *ListCreate(void);	//done
+List *ListCreate(void);
 
 ListNode *ListGetFirst(List *list);
 ListNode *ListGetLast(List *list);
@@ -51,17 +50,14 @@ ListNode *ListGetPrev(ListNode *node);
 void *ListGetData(ListNode *node);
 uint32_t ListGetCount(List *list);
 
-void ListAddFirst(List *list, void *data);	// TODO : change to int32_t to add return error
+void ListAddFirst(List *list, void *data);
 void ListAddLast(List *list, void *data);
 void ListAddNext(List *list, ListNode *node, void *data);
 void ListAddPrev(List *list, ListNode *node, void *data);
 
-void ListRemoveLast(List *list);
-void ListRemoveFirst(List *lists);
-void ListRemove(ListNode *node);
-
 ListNode *ListFindNode(List *list, int (*compare)(void *v1, void *v2), void *value);
 
-void ListErase(List *list);
+void ListRemoveNode(List *list, ListNode *node);
+void ListDelete(List *list);
 
 #endif // __DOUBLE_LINKED_LIST__H__

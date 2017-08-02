@@ -157,10 +157,11 @@ void ListAddNext(List *list, ListNode *node, void *data)
 	}
 	else
 	{
-		ListNode *nextNode = ListCreateNode(data);
-		nextNode->next = node->next;
-		nextNode->prev = node;
-		node->next = nextNode;
+		ListNode *new_node = ListCreateNode(data);
+		new_node->next = node->next;
+		new_node->prev = node;
+		node->next->prev = new_node;
+		node->next = new_node;
 		list->count++;
 	}
 }
@@ -182,10 +183,11 @@ void ListAddPrev(List *list, ListNode *node, void *data)
 	}
 	else
 	{
-		ListNode *nextNode = ListCreateNode(data);
-		nextNode->prev = node->prev;
-		nextNode->next = node;
-		node->prev = nextNode;
+		ListNode *new_node = ListCreateNode(data);
+		new_node->prev = node->prev;
+		new_node->next = node;
+		node->prev->next = new_node;
+		node->prev = new_node;
 		list->count++;
 	}
 }
@@ -269,4 +271,61 @@ ListNode *ListFindNode(List *list, int (*compare)(void *d1, void *d2), void *dat
 		node = ListGetNext(node);
 	}
 	return node;
+}
+
+/*
+ * name: ListRemoveNode
+ * 
+ * WARNING: the function does not free the memory of the data.
+ * It is the responsability of the user.
+ * 
+ * @param	List *list
+ * @param	ListNode *node		node to remove
+ * @return	void
+ */
+void ListRemoveNode(List *list, ListNode *node)
+{
+	assert(node != NULL);
+	assert(list->count != 0);
+	
+	if(list->count == 1)
+	{
+		list->first = NULL;
+		list->last = NULL;
+	}
+	else if(node == ListGetFirst(list))
+	{
+		list->first = node->next;
+		node->next->prev = NULL;
+	}
+	else if(node == ListGetLast(list))
+	{
+		list->last = node->prev;
+		node->prev->next = NULL;
+	}
+	else
+	{	
+	node->prev->next = node->next;
+	node->next->prev = node->prev;
+	}
+	list->count--;
+	free(node);
+}
+
+
+/*
+ * name: ListDelete
+ * @param	List *list		list to delete
+ * @return
+ */
+void ListDelete(List *list)
+{
+	ListNode *node = ListGetFirst(list);
+	while(node!= NULL)
+	{
+		ListNode *next = ListGetNext(node);
+		ListRemoveNode(list, node);
+		node = next;
+	}
+	free(list);
 }
